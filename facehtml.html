@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        #imageContainer {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #capturedImage {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Face Recognition</h1>
+    <button class="btn" id="captureBtn">Capture Image</button>
+    <button class="btn" id="detectBtn">Detect Face</button>
+    <div id="imageContainer">
+        <h2>Captured Image</h2>
+        <img src="" alt="Captured Image" id="capturedImage">
+    </div>
+
+    <script>
+        // Add your JavaScript code here
+        const captureBtn = document.getElementById('captureBtn');
+        const detectBtn = document.getElementById('detectBtn');
+        const capturedImage = document.getElementById('capturedImage');
+
+        // Event listener for capturing image
+        captureBtn.addEventListener('click', () => {
+            // Access the user's camera
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then((stream) => {
+                    const video = document.createElement('video');
+                    video.srcObject = stream;
+                    video.play();
+
+                    // Create a canvas element to capture the image
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 400;
+                    canvas.height = 300;
+                    const context = canvas.getContext('2d');
+
+                    // Capture image from the video stream
+                    setTimeout(() => {
+                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        const imageDataURL = canvas.toDataURL('image/png');
+
+                        // Display the captured image
+                        capturedImage.src = imageDataURL;
+
+                        // Stop the video stream
+                        stream.getTracks().forEach(track => track.stop());
+                    }, 1000); // Adjust the delay as needed
+                })
+                .catch((error) => {
+                    console.error('Error accessing the camera:', error);
+                });
+        });
+
+        // Event listener for detecting face
+        detectBtn.addEventListener('click', () => {
+            // Add code to detect face
+            alert('Face detection functionality is not implemented yet.');
+        });
+    </script>
+</body>
+</html>
